@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ilm-fan va taraqqiyot | 11-maktab 9-B sinf (Baxt shahri)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- KIRISH VA RO'YXATDAN O'TISH EKRANI -->
+    <div class="auth-screen" id="authScreen">
+        <div class="auth-card">
+            <div class="auth-card__badge">11-MAKTAB • 9-"B" SINF • BAXT SHAHRI</div>
+            <h1 class="auth-card__heading">“Ilm-fan va taraqqiyot”</h1>
+            <p class="auth-card__sub">2-guruh loyihasi portali</p>
+
+            <div class="auth-tabs">
+                <button type="button" class="auth-tab active" id="loginTabBtn" onclick="switchAuth('login')">Kirish</button>
+                <button type="button" class="auth-tab" id="registerTabBtn" onclick="switchAuth('register')">Ro‘yxatdan o‘tish</button>
+            </div>
+
+            <!-- KIRISH FORMASI -->
+            <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginInput">Login</label>
+                    <input type="text" id="loginInput" placeholder="Loginni kiriting..." required>
+                </div>
+                <div class="form-group">
+                    <label for="passwordInput">Parol</label>
+                    <input type="password" id="passwordInput" placeholder="Parolni kiriting..." required>
+                </div>
+                <p class="form-msg" id="loginMessage"></p>
+                <button type="submit" class="btn btn--primary btn--full">Kirish</button>
+
+                <div class="demo-box">
+                    <span>Tayyor ma’lumotlar bilan to‘ldirish:</span>
+                    <button type="button" class="btn btn--outline btn--sm" onclick="fillDemoCredentials()">
+                        Login: <strong>77</strong> | Parol: <strong>77</strong>
+                    </button>
+                </div>
+            </form>
+
+            <!-- RO'YXATDAN O'TISH FORMASI -->
+            <form class="auth-form hidden" id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label for="regName">Ism va familiya</label>
+                    <input type="text" id="regName" placeholder="Masalan: Karimova Madina" required>
+                </div>
+                <div class="form-group">
+                    <label for="regLogin">Yangi login</label>
+                    <input type="text" id="regLogin" placeholder="Login kiriting..." required>
+                </div>
+                <div class="form-group">
+                    <label for="regPass">Yangi parol</label>
+                    <input type="password" id="regPass" placeholder="Kamida 4 belgi..." minlength="4" required>
+                </div>
+                <p class="form-msg" id="registerMessage"></p>
+                <button type="submit" class="btn btn--primary btn--full">Ro‘yxatdan o‘tish</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ASOSIY LOYIHA SAHIFASI -->
+    <div class="portal hidden" id="portalApp">
+
+        <!-- NAVIGATSIYA MENYUSI -->
+        <nav class="navbar">
+            <div class="navbar__brand">11-Maktab • 9-"B" • Baxt</div>
+
+            <ul class="navbar__list">
+                <li><button class="nav-btn active" data-page="home" onclick="openPage('home')">🏛️ Bosh sahifa</button></li>
+                <li><button class="nav-btn" data-page="composition" onclick="openPage('composition')">🎨 Dizayn</button></li>
+                <li><button class="nav-btn" data-page="pillars" onclick="openPage('pillars')">📚 3 Yo‘nalish</button></li>
+                <li><button class="nav-btn" data-page="gallery" onclick="openPage('gallery')">🖼️ Galereya</button></li>
+                <li><button class="nav-btn" data-page="team" onclick="openPage('team')">👥 Guruh</button></li>
+                <li><button class="nav-btn" data-page="quiz" onclick="openPage('quiz')">🧠 Viktorina</button></li>
+                <li><button class="nav-btn" data-page="speech" onclick="openPage('speech')">🎤 Nutq va FAQ</button></li>
+                <li><button class="nav-btn" data-page="guestbook" onclick="openPage('guestbook')">💬 Izohlar</button></li>
+                <li><button class="nav-btn" data-page="map" onclick="openPage('map')">📍 Maktab xaritasi</button></li>
+                <li><button class="nav-btn" data-page="profile" onclick="openPage('profile')">🪪 Profil</button></li>
+            </ul>
+
+            <div class="navbar__session">
+                <select class="theme-select" id="colorSchemeSelect" onchange="changeColorScheme(this.value)" title="Rang mavzusi">
+                    <option value="default">🔵 Ko‘k-Feruza</option>
+                    <option value="emerald">🟢 Zumrad-Oltin</option>
+                    <option value="dark">🌙 Tungi rejim</option>
+                </select>
+                <button class="btn btn--outline btn--sm" onclick="toggleFullscreen()" title="To‘liq ekran">⛶</button>
+                <span class="user-chip" id="userChip">O‘quvchi</span>
+                <button class="btn btn--danger btn--sm" onclick="handleLogout()">Chiqish</button>
+            </div>
+        </nav>
+
+        <!-- HEADER -->
+        <header class="hero">
+            <span class="hero__badge">SIRDARYO VILOYATI • BAXT SHAHRI • ITTIFOQ MFY • 11-MAKTAB</span>
+            <h1 class="hero__title">2-guruh – “Ilm-fan va taraqqiyot”</h1>
+            <p class="hero__quote">“...zamonaviy binolar esa taraqqiyotimizni ifodalaydi.”</p>
+            <p class="hero__task">
+                <strong>Topshiriq:</strong> Milliy qadriyatlar, ilm-fan va zamonaviy texnologiyalarni birlashtiruvchi dizayn yarating.
+            </p>
+        </header>
+
+        <main class="main-container">
+
+            <!-- 1. BOSH SAHIFA -->
+            <section class="page active" id="page-home">
+                <h2 class="page-title">Loyiha mazmuni va o‘quvchi javobi</h2>
+
+                <div class="quote-banner">
+                    <div class="quote-banner__label">O‘QUVCHI JAVOBI</div>
+                    <p class="quote-banner__text" id="mainStudentAnswer">
+                        Biz kitob, milliy naqshlar va raqamli texnologiyalar tasvirini birlashtirdik. Kitob ilm-ma’rifatni, naqshlar milliy o‘zligimizni, texnologiyalar esa innovatsion taraqqiyotni anglatadi.
+                    </p>
+                    <button class="btn btn--gold btn--sm" onclick="copyAnswer()">Matnni nusxalash</button>
+                    <span class="copy-feedback" id="copyFeedback"></span>
+                </div>
+
+                <!-- KUN HIKMATI -->
+                <div class="wisdom-card">
+                    <div class="wisdom-card__top">
+                        <span class="wisdom-card__badge">💡 KUN HIKMATI</span>
+                        <button type="button" class="btn btn--outline btn--sm" onclick="nextWisdomQuote()">🔄 Yangi hikmat</button>
+                    </div>
+                    <blockquote class="wisdom-card__text" id="wisdomQuoteText">
+                        “Bilim — insonni yuksaltiruvchi eng qudratli kuchdir.”
+                    </blockquote>
+                    <p class="wisdom-card__author" id="wisdomQuoteAuthor">— Alisher Navoiy</p>
+                </div>
+
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-card__icon">📖</div>
+                        <h3>Kitob</h3>
+                        <p>Ilm-ma’rifat, izlanish va mustahkam bilim poydevorini ifodalaydi.</p>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-card__icon">💠</div>
+                        <h3>Milliy naqshlar</h3>
+                        <p>Milliy o‘zligimiz, tarixiy xotiramiz va madaniy qadriyatlarimizni anglatadi.</p>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-card__icon">💻</div>
+                        <h3>Raqamli texnologiyalar</h3>
+                        <p>Innovatsion taraqqiyot, raqamli yechimlar va kelajak sari harakatni bildiradi.</p>
+                    </div>
+                </div>
+
+                <!-- SINF VA LOYIHA ESLATMALAR TAXTASI -->
+                <div class="notes-board">
+                    <h3>📌 Loyiha va sinf eslatmalar taxtasi</h3>
+                    <form class="notes-form" onsubmit="addProjectNote(event)">
+                        <input type="text" id="projectNoteInput" placeholder="Yangi eslatma yozing (masalan: Taqdimotga tayyorgarlik)..." required>
+                        <button type="submit" class="btn btn--primary btn--sm">+ Eslatma</button>
+                    </form>
+                    <ul class="notes-list" id="projectNotesList"></ul>
+                </div>
+            </section>
+
+            <!-- 2. DIZAYN KOMPOZITSIYASI + AYLANTIRISH/KATTALASHTIRISH + SLAYD REJIMI -->
+            <section class="page" id="page-composition">
+                <div class="page-head-flex">
+                    <h2 class="page-title">Interaktiv dizayn: Kitob + Milliy naqsh + Texnologiya</h2>
+                    <div class="quiz-controls">
+                        <button class="btn btn--gold btn--sm" id="autoPlayBtn" onclick="toggleAutoPresentation()">▶️ Avtomatik taqdimot</button>
+                        <button class="btn btn--outline btn--sm" id="slideModeBtn" onclick="toggleSlideView()">🖥️ Slayd rejimi</button>
+                    </div>
+                </div>
+
+                <div class="studio-box" id="studioBox">
+                    <div class="studio-svg-box">
+                        <svg id="mainDesignSvg" viewBox="0 0 360 230" class="studio-svg">
+                            <g id="layerPattern" class="svg-layer" transform="translate(180, 95)">
+                                <polygon points="0,-55 39,-39 55,0 39,39 0,55 -39,39 -55,0 -39,-39" fill="none" stroke="teal" stroke-width="3" />
+                                <rect x="-34" y="-34" width="68" height="68" fill="none" stroke="gold" stroke-width="3.5" />
+                                <rect x="-34" y="-34" width="68" height="68" fill="none" stroke="midnightblue" stroke-width="2.5" transform="rotate(45)" />
+                                <circle cx="0" cy="0" r="18" fill="whitesmoke" stroke="teal" stroke-width="3" />
+                            </g>
+
+                            <g id="layerTech" class="svg-layer">
+                                <line x1="180" y1="77" x2="180" y2="22" stroke="midnightblue" stroke-width="3" />
+                                <circle cx="180" cy="18" r="6" fill="gold" stroke="midnightblue" stroke-width="2" class="tech-pulse" />
+                                <polyline points="135,58 95,30 60,30" fill="none" stroke="teal" stroke-width="3" />
+                                <rect x="46" y="22" width="16" height="16" rx="3" fill="teal" />
+                                <polyline points="225,58 265,30 300,30" fill="none" stroke="teal" stroke-width="3" />
+                                <rect x="298" y="22" width="16" height="16" rx="3" fill="teal" />
+                                <text x="180" y="100" text-anchor="middle" font-size="13" font-weight="bold" fill="midnightblue">&lt;/&gt;</text>
+                            </g>
+
+                            <g id="layerBook" class="svg-layer">
+                                <path d="M55,172 Q117,152 180,178 Q243,152 305,172 L305,198 Q243,178 180,204 Q117,178 55,198 Z" fill="midnightblue" />
+                                <path d="M62,166 Q117,147 180,172 Q243,147 298,166 L298,186 Q243,166 180,192 Q117,166 62,186 Z" fill="white" stroke="teal" stroke-width="2.5" />
+                                <line x1="180" y1="172" x2="180" y2="204" stroke="gold" stroke-width="2.5" />
+                            </g>
+                        </svg>
+                    </div>
+
+                    <!-- AYLANTIRISH VA KATTALASHTIRISH BOSHQARUVI -->
+                    <div class="svg-controls">
+                        <button type="button" class="btn btn--outline btn--sm" onclick="rotateSvg(-15)">↺ Chapga</button>
+                        <button type="button" class="btn btn--outline btn--sm" onclick="rotateSvg(15)">↻ O‘ngga</button>
+                        <button type="button" class="btn btn--outline btn--sm" onclick="zoomSvg(0.1)">🔍 +</button>
+                        <button type="button" class="btn btn--outline btn--sm" onclick="zoomSvg(-0.1)">🔍 -</button>
+                        <button type="button" class="btn btn--gold btn--sm" onclick="resetSvgTransform()">Reset</button>
+                    </div>
+
+                    <div class="selector-bar">
+                        <button class="selector-btn active" data-part="all" onclick="selectPart('all')">✨ Barcha elementlar</button>
+                        <button class="selector-btn" data-part="book" onclick="selectPart('book')">📖 Kitob (Ilm-ma’rifat)</button>
+                        <button class="selector-btn" data-part="pattern" onclick="selectPart('pattern')">💠 Milliy naqsh (O‘zlik)</button>
+                        <button class="selector-btn" data-part="tech" onclick="selectPart('tech')">💻 Texnologiya (Taraqqiyot)</button>
+                    </div>
+
+                    <div class="inspector-card" id="inspectorCard">
+                        <h3 id="inspectorTitle">✨ Barcha elementlar uyg‘unligi</h3>
+                        <p id="inspectorDesc">
+                            Biz kitob, milliy naqshlar va raqamli texnologiyalar tasvirini birlashtirdik. Kitob ilm-ma’rifatni, naqshlar milliy o‘zligimizni, texnologiyalar esa innovatsion taraqqiyotni anglatadi.
+                        </p>
+                        <div class="slide-nav hidden" id="slideNav">
+                            <button type="button" class="btn btn--gold btn--sm" onclick="prevSlideStep()">⬅️ Oldingi slayd</button>
+                            <span id="slideCounterText">Slayd 1 / 4</span>
+                            <button type="button" class="btn btn--gold btn--sm" onclick="nextSlideStep()">Keyingi slayd ➡️</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. 3 YO'NALISH + XRONOLOGIYA -->
+            <section class="page" id="page-pillars">
+                <h2 class="page-title">Loyihaning 3 asosiy yo‘nalishi</h2>
+                <div class="cards-grid">
+                    <article class="info-card">
+                        <span class="info-card__num">01</span>
+                        <h3>Ilm-ma’rifat — Kitob</h3>
+                        <p>
+                            Kitob bilimga, tafakkurga va ma’rifatga yo‘l ochadi. Yangi g‘oyalar va kashfiyotlar kitob o‘qish, o‘rganish va izlanish natijasida shakllanadi.
+                        </p>
+                    </article>
+                    <article class="info-card">
+                        <span class="info-card__num">02</span>
+                        <h3>Milliy o‘zlik — Naqshlar</h3>
+                        <p>
+                            Milliy naqshlar xalqimizning tarixi, estetik didi va madaniy merosini ko‘rsatadi. Zamonaviy rivojlanish milliy qadriyatlarga tayansagina mazmunli bo‘ladi.
+                        </p>
+                    </article>
+                    <article class="info-card">
+                        <span class="info-card__num">03</span>
+                        <h3>Innovatsion taraqqiyot — Texnologiyalar</h3>
+                        <p>
+                            Raqamli texnologiyalar bilim va qadriyatlarni yangi imkoniyatlar bilan boyitib, jamiyatni zamonaviy taraqqiyot sari yetaklaydi.
+                        </p>
+                    </article>
+                </div>
+
+                <h2 class="page-title section-gap">Loyiha bosqichlari xronologiyasi</h2>
+                <div class="timeline">
+                    <div class="timeline__item">
+                        <span class="timeline__step">1-bosqich</span>
+                        <h3>Topshiriq va g‘oya shakllantirish</h3>
+                        <p>9-"B" sinf 2-guruh a’zolari bilan “Ilm-fan va taraqqiyot” mavzusini tahlil qilish va asosiy 3 ramzni tanlash.</p>
+                    </div>
+                    <div class="timeline__item">
+                        <span class="timeline__step">2-bosqich</span>
+                        <h3>Dizayn va ramzlar uyg‘unligi</h3>
+                        <p>Kitob (ilm-ma’rifat), milliy naqsh (o‘zlik) va raqamli texnologiyalarni yagona kompozitsiyada birlashtirish.</p>
+                    </div>
+                    <div class="timeline__item">
+                        <span class="timeline__step">3-bosqich</span>
+                        <h3>Interaktiv portal va 30 talik viktorina</h3>
+                        <p>O‘quvchilar bilimini sinash uchun viktorina, reyting jadvali va avtomatik elektron sertifikat tizimini yaratish.</p>
+                    </div>
+                    <div class="timeline__item">
+                        <span class="timeline__step">4-bosqich</span>
+                        <h3>Sinf oldida taqdimot va himoya</h3>
+                        <p>Tayyor nutq, sekundomer va savol-javob kartochkalari yordamida loyihani muvaffaqiyatli himoya qilish.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. VIZUAL GALEREYA + RASM YUKLASH -->
+            <section class="page" id="page-gallery">
+                <h2 class="page-title">Loyiha tasvirlari galereyasi</h2>
+                <p class="page-subtitle">Tasvir ustiga bosib kattalashtirishingiz yoki kompyuteringizdan yangi rasm qo‘shishingiz mumkin.</p>
+
+                <form class="upload-bar" onsubmit="handleGalleryUpload(event)">
+                    <input type="text" id="customImgTitle" placeholder="Rasm nomi (masalan: 9-B jamoasi)..." required>
+                    <input type="file" id="customImgFile" accept="image/*" required>
+                    <button type="submit" class="btn btn--primary btn--sm">+ Rasm yuklash</button>
+                </form>
+
+                <div class="gallery-grid" id="galleryGrid">
+                    <div class="gallery-card" onclick="openLightbox('Kitob — Ilm-ma’rifat ramzi', 'Kitob bilim va ma’rifatni anglatadi.', 'book')">
+                        <div class="gallery-card__thumb">
+                            <svg viewBox="0 0 200 130">
+                                <rect width="200" height="130" fill="whitesmoke" />
+                                <path d="M30,85 Q65,70 100,90 Q135,70 170,85 L170,105 Q135,90 100,110 Q65,90 30,105 Z" fill="midnightblue" />
+                                <path d="M35,80 Q65,65 100,85 Q135,65 165,80 L165,96 Q135,80 100,100 Q65,80 35,96 Z" fill="white" stroke="teal" stroke-width="2.5" />
+                                <line x1="100" y1="85" x2="100" y2="110" stroke="gold" stroke-width="2.5" />
+                            </svg>
+                        </div>
+                        <div class="gallery-card__caption">
+                            <strong>1-tasvir: Kitob</strong>
+                            <span>Ilm-ma’rifat</span>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card" onclick="openLightbox('Milliy naqshlar — Milliy o‘zlik ramzi', 'Naqshlar milliy o‘zligimizni anglatadi.', 'pattern')">
+                        <div class="gallery-card__thumb">
+                            <svg viewBox="0 0 200 130">
+                                <rect width="200" height="130" fill="whitesmoke" />
+                                <g transform="translate(100, 65)">
+                                    <rect x="-30" y="-30" width="60" height="60" fill="none" stroke="teal" stroke-width="4" />
+                                    <rect x="-30" y="-30" width="60" height="60" fill="none" stroke="gold" stroke-width="4" transform="rotate(45)" />
+                                    <circle cx="0" cy="0" r="14" fill="midnightblue" />
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="gallery-card__caption">
+                            <strong>2-tasvir: Milliy naqsh</strong>
+                            <span>Milliy o‘zlik</span>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card" onclick="openLightbox('Raqamli texnologiyalar — Innovatsion taraqqiyot', 'Texnologiyalar innovatsion taraqqiyotni anglatadi.', 'tech')">
+                        <div class="gallery-card__thumb">
+                            <svg viewBox="0 0 200 130">
+                                <rect width="200" height="130" fill="whitesmoke" />
+                                <rect x="70" y="35" width="60" height="60" rx="10" fill="midnightblue" stroke="gold" stroke-width="3" />
+                                <line x1="100" y1="35" x2="100" y2="15" stroke="teal" stroke-width="3" />
+                                <line x1="100" y1="95" x2="100" y2="115" stroke="teal" stroke-width="3" />
+                                <line x1="70" y1="65" x2="45" y2="65" stroke="teal" stroke-width="3" />
+                                <line x1="130" y1="65" x2="155" y2="65" stroke="teal" stroke-width="3" />
+                                <text x="100" y="71" text-anchor="middle" fill="gold" font-size="16" font-weight="bold">&lt;/&gt;</text>
+                            </svg>
+                        </div>
+                        <div class="gallery-card__caption">
+                            <strong>3-tasvir: Texnologiya</strong>
+                            <span>Innovatsion taraqqiyot</span>
+                        </div>
+                    </div>
+
+                    <div class="gallery-card" onclick="openLightbox('Yaxlit dizayn kompozitsiyasi', 'Biz kitob, milliy naqshlar va raqamli texnologiyalar tasvirini birlashtirdik.', 'combo')">
+                        <div class="gallery-card__thumb">
+                            <svg viewBox="0 0 200 130">
+                                <rect width="200" height="130" fill="whitesmoke" />
+                                <g transform="translate(100, 52)">
+                                    <rect x="-20" y="-20" width="40" height="40" fill="none" stroke="teal" stroke-width="3" />
+                                    <rect x="-20" y="-20" width="40" height="40" fill="none" stroke="gold" stroke-width="3" transform="rotate(45)" />
+                                </g>
+                                <line x1="100" y1="32" x2="100" y2="14" stroke="midnightblue" stroke-width="2.5" />
+                                <circle cx="100" cy="12" r="4" fill="gold" />
+                                <path d="M40,95 Q70,82 100,98 Q130,82 160,95 L160,110 Q130,97 100,113 Q70,97 40,110 Z" fill="midnightblue" />
+                            </svg>
+                        </div>
+                        <div class="gallery-card__caption">
+                            <strong>4-tasvir: Umumiy g‘oya</strong>
+                            <span>Uyg‘un kompozitsiya</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. GURUH A'ZOLARI (QO'SHISH, TAHRIRLASH, O'CHIRISH) -->
+            <section class="page" id="page-team">
+                <h2 class="page-title">11-maktab 9-"B" sinf — 2-guruh a’zolari</h2>
+
+                <form class="add-member-form" onsubmit="addTeamMember(event)">
+                    <input type="text" id="memberNameInput" placeholder="O‘quvchi ismi-familiyasi..." required>
+                    <input type="text" id="memberRoleInput" placeholder="Vazifasi (masalan: Dizayner)..." required>
+                    <button type="submit" class="btn btn--primary btn--sm">+ A’zo qo‘shish</button>
+                </form>
+
+                <div class="cards-grid" id="teamCardsGrid"></div>
+            </section>
+
+            <!-- 6. VIKTORINA + MASLAHAT + REYTING + SERTIFIKAT (UNIKAL ID BILAN) -->
+            <section class="page" id="page-quiz">
+                <div class="page-head-flex">
+                    <h2 class="page-title">O‘zbekiston bo‘yicha 30 talik viktorina</h2>
+                    <div class="quiz-controls">
+                        <span class="timer-badge" id="quizTimerBadge">⏱️ 00:00</span>
+                        <span class="score-badge" id="quizScoreBadge">Ball: 0</span>
+                        <button class="btn btn--outline btn--sm" onclick="showQuizHint()">💡 Maslahat</button>
+                        <button class="btn btn--outline btn--sm" onclick="shuffleQuiz()">🔀 Aralashtirish</button>
+                        <button class="btn btn--gold btn--sm" onclick="openCertificateSection()">🏅 Sertifikat</button>
+                    </div>
+                </div>
+
+                <div class="filter-bar">
+                    <button class="filter-btn active" data-cat="all" onclick="filterQuizByCategory('all')">Barchasi (30)</button>
+                    <button class="filter-btn" data-cat="symbols" onclick="filterQuizByCategory('symbols')">Davlat ramzlari va sana</button>
+                    <button class="filter-btn" data-cat="history" onclick="filterQuizByCategory('history')">Tarix va allomalar</button>
+                    <button class="filter-btn" data-cat="geography" onclick="filterQuizByCategory('geography')">Geografiya va madaniyat</button>
+                </div>
+
+                <div class="quiz-card" id="quizActiveCard">
+                    <div class="quiz-card__progress" id="quizProgress">Savol 1 / 30</div>
+                    <h3 class="quiz-card__q" id="quizQuestion"></h3>
+                    <p class="quiz-card__hint hidden" id="quizHintBox"></p>
+                    <div class="quiz-card__options" id="quizOptions"></div>
+                    <p class="quiz-card__feedback" id="quizFeedback"></p>
+                    <button class="btn btn--primary hidden" id="nextQuizBtn" onclick="nextQuiz()">Keyingi savol</button>
+                </div>
+
+                <div class="quiz-summary hidden" id="quizSummaryCard">
+                    <h3>Viktorina yakunlandi!</h3>
+                    <p class="quiz-summary__score" id="finalScoreText"></p>
+                    <p class="quiz-summary__time" id="finalTimeText"></p>
+                    <p class="quiz-summary__comment" id="finalCommentText"></p>
+                    <div class="summary-actions">
+                        <button class="btn btn--gold" onclick="restartQuiz()">Barchasini qaytadan ishlash</button>
+                        <button class="btn btn--danger hidden" id="retryWrongBtn" onclick="retryWrongQuestions()">Xato savollarni qayta ishlash</button>
+                        <button class="btn btn--primary" onclick="openCertificateSection()">🏅 Sertifikat olish</button>
+                    </div>
+                </div>
+
+                <!-- ELEKTRON SERTIFIKAT GENERATORI -->
+                <div class="certificate-panel hidden" id="certificatePanel">
+                    <div class="certificate-toolbar">
+                        <div class="certificate-name-box">
+                            <label for="certStudentNameInput">O‘quvchi ismi-familiyasi:</label>
+                            <input type="text" id="certStudentNameInput" placeholder="Ism-familiyani kiriting..." oninput="updateCertificateName()">
+                        </div>
+                        <div class="certificate-name-box">
+                            <label for="certTeacherNameInput">Sinf / Loyiha rahbari:</label>
+                            <input type="text" id="certTeacherNameInput" value="9-B sinf rahbari" oninput="updateCertificateTeacher()">
+                        </div>
+                        <div class="certificate-btns">
+                            <button type="button" class="btn btn--primary btn--sm" onclick="printCertificate()">🖨️ Chop etish (Print)</button>
+                            <button type="button" class="btn btn--outline btn--sm" onclick="closeCertificateSection()">Yopish</button>
+                        </div>
+                    </div>
+
+                    <div class="certificate-sheet" id="certificateSheet">
+                        <div class="certificate-sheet__inner">
+                            <div class="certificate-sheet__top">
+                                SIRDARYO VILOYATI • BAXT SHAHRI • ITTIFOQ MFY<br>
+                                <strong>11-SONLI UMUMIY O‘RTA TA’LIM MAKTABI</strong>
+                            </div>
+                            <div class="certificate-sheet__ribbon">FAXRIY YORLIQ / SERTIFIKAT</div>
+                            <div class="cert-id-badge">ID: <strong id="certUniqueId">11M-9B-2026-0001</strong></div>
+                            <p class="certificate-sheet__lead">Ushbu sertifikat bilan</p>
+                            <h3 class="certificate-sheet__student" id="certDisplayName">9-B o‘quvchisi</h3>
+                            <p class="certificate-sheet__body">
+                                9-"B" sinf 2-guruhining <strong>“Ilm-fan va taraqqiyot”</strong> loyihasi doirasida o‘tkazilgan O‘zbekiston bo‘yicha viktorinada faol ishtirok etib,
+                                <strong id="certDisplayScore">0 / 30 ball (0%)</strong> natija qayd etganligi uchun taqdirlanadi.
+                            </p>
+                            <div class="certificate-sheet__footer">
+                                <div>
+                                    <span>Sana:</span>
+                                    <strong id="certDisplayDate">22.11.2026</strong>
+                                </div>
+                                <div>
+                                    <span>Ko‘rsatkich:</span>
+                                    <strong id="certDisplayTime">00:00</strong>
+                                </div>
+                                <div class="cert-stamp">
+                                    11-MAKTAB<br>9-"B" SINF<br>TASDIQLANDI
+                                </div>
+                                <div>
+                                    <span>Loyiha rahbari:</span>
+                                    <strong id="certDisplayTeacher">9-B sinf rahbari</strong>
+                                    <span class="cert-sign-line">_________________ (imzo)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- REYTING JADVALI -->
+                <div class="leaderboard-box">
+                    <h3>🏆 9-"B" sinf viktorina reyting jadvali</h3>
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th>O‘rin</th>
+                                <th>O‘quvchi</th>
+                                <th>Login</th>
+                                <th>Eng yuqori ball</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboardBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 7. TAQDIMOT NUTQI + SEKUNDOMER + FAQ -->
+            <section class="page" id="page-speech">
+                <div class="page-head-flex">
+                    <h2 class="page-title">Sinf oldida aytish uchun tayyor nutq</h2>
+                    <div class="font-zoom-bar">
+                        <button class="btn btn--primary btn--sm" id="ttsBtn" onclick="toggleSpeechAudio()">🔊 Ovozli o‘qish</button>
+                        <button class="btn btn--outline btn--sm" onclick="changeSpeechSize(-2)">A-</button>
+                        <span id="speechSizeLabel">17px</span>
+                        <button class="btn btn--outline btn--sm" onclick="changeSpeechSize(2)">A+</button>
+                    </div>
+                </div>
+
+                <div class="speech-timer-bar">
+                    <div>
+                        <strong>⏱️ Taqdimot reglamenti (2:00):</strong>
+                        <span class="speech-timer-display" id="speechStopwatchDisplay">00:00</span>
+                    </div>
+                    <div class="speech-timer-btns">
+                        <button type="button" class="btn btn--primary btn--sm" id="speechStartBtn" onclick="toggleSpeechStopwatch()">▶️ Boshlash</button>
+                        <button type="button" class="btn btn--outline btn--sm" onclick="resetSpeechStopwatch()">🔄 Nolga tushirish</button>
+                    </div>
+                </div>
+
+                <div class="speech-card" id="speechCard">
+                    <p>
+                        Assalomu alaykum! Biz Sirdaryo viloyati, Baxt shahri, Ittifoq mahallasidagi <strong>11-maktab 9-"B" sinf</strong> 2-guruh o‘quvchilari 
+                        <strong>“Ilm-fan va taraqqiyot”</strong> mavzusi bo‘yicha topshiriqni bajardik.
+                    </p>
+                    <p>
+                        Biz kitob, milliy naqshlar va raqamli texnologiyalar tasvirini birlashtirdik. 
+                        Kitob ilm-ma’rifatni, naqshlar milliy o‘zligimizni, texnologiyalar esa innovatsion taraqqiyotni anglatadi.
+                    </p>
+                    <p>
+                        E’tiboringiz uchun rahmat!
+                    </p>
+                </div>
+
+                <h2 class="page-title section-gap">❓ Taqdimot himoyasi uchun savol-javoblar (FAQ)</h2>
+                <div class="faq-list">
+                    <details class="faq-item" open>
+                        <summary>1. Nega loyiha dizaynida aynan kitob, milliy naqsh va texnologiyalarni birlashtirdingiz?</summary>
+                        <p>Chunki haqiqiy taraqqiyot bilim (kitob), milliy qadriyatlar (naqshlar) va zamonaviy raqamli texnologiyalarning uyg‘unligida quriladi.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>2. Milliy naqshlarning zamonaviy binolar va texnologiyalar bilan qanday bog‘liqligi bor?</summary>
+                        <p>Zamonaviy binolar va raqamli yechimlar taraqqiyotimizni ko‘rsatsa, milliy naqshlar o‘zligimiz va boy tarixiy merosimizni saqlab qolishga xizmat qiladi.</p>
+                    </details>
+                    <details class="faq-item">
+                        <summary>3. Ushbu portal sinfdoshlarimizga qanday amaliy foyda beradi?</summary>
+                        <p>Portal orqali o‘quvchilar O‘zbekiston tarixi va madaniyatiga oid 30 talik viktorinani yechishi, reytingda bellashishi va natijasiga ko‘ra elektron sertifikat olishi mumkin.</p>
+                    </details>
+                </div>
+            </section>
+
+            <!-- 8. FIKR-MULOHAZA DAFTARI + QIDIRUV -->
+            <section class="page" id="page-guestbook">
+                <h2 class="page-title">Sinfdoshlar va ustozlar fikr-mulohaza daftari</h2>
+                <form class="guestbook-form" onsubmit="addGuestComment(event)">
+                    <input type="text" id="commentAuthorInput" placeholder="Ismingiz (masalan: Ustoz yoki sinfdosh)..." required>
+                    <textarea id="commentTextInput" rows="3" placeholder="Loyiha haqidagi fikringizni yozing..." required></textarea>
+                    <button type="submit" class="btn btn--primary">Fikr qoldirish</button>
+                </form>
+
+                <div class="search-comment-box">
+                    <input type="text" id="commentSearchInput" placeholder="🔍 Izohlarni muallif yoki so‘z bo‘yicha qidirish..." oninput="renderComments()">
+                </div>
+
+                <div class="comments-list" id="commentsList"></div>
+            </section>
+
+            <!-- 9. MAKTAB XARITASI + MA'LUMOT KARTOCHKASI -->
+            <section class="page" id="page-map">
+                <h2 class="page-title">11-maktab manzili va xaritasi</h2>
+                <div class="map-layout">
+                    <div class="map-info-card">
+                        <h3>📍 11-Умумтаълим Мактаби</h3>
+                        <p><strong>Manzil:</strong> Sirdaryo viloyati, Baxt shahri, Ittifoq mahallasi</p>
+                        <p><strong>Plus Code:</strong> PP6G+J6H, Baxt, Sirdaryo viloyati</p>
+                        <p><strong>Koordinatalar:</strong> 40.7115487, 68.5731411</p>
+                        <p><strong>Sinf va guruh:</strong> 9-"B" sinf, 2-guruh</p>
+                        <a class="btn btn--primary btn--sm" target="_blank" rel="noopener"
+                           href="https://www.google.com/maps/place/11-%D0%A3%D0%BC%D1%83%D0%BC%D1%82%D0%B0%D1%8A%D%BB%D0%B8%D0%BC+%D0%9C%D0%B0%D0%BA%D1%82%D0%B0%D0%B1%D0%B8/@40.7115487,68.5731411,16z">
+                            Google Xaritada kattaroq ochish ↗
+                        </a>
+                    </div>
+
+                    <div class="map-frame-box">
+                        <iframe
+                            title="11-Умумтаълим Мактаби — Baxt shahri, Sirdaryo viloyati"
+                            src="https://maps.google.com/maps?q=40.7115487,68.5731411&hl=uz&z=16&output=embed"
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+
+                <div class="school-about-grid">
+                    <div class="summary-card">
+                        <h3>🏫 11-sonli umumiy o‘rta ta’lim maktabi</h3>
+                        <p>Sirdaryo viloyati Baxt shahri Ittifoq mahallasida joylashgan zamonaviy ta’lim maskani. Maktabda o‘quvchilarning ilm-fan, axborot texnologiyalari va milliy qadriyatlarni chuqur o‘rganishi uchun barcha sharoitlar yaratilgan.</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>🌆 Baxt shahri haqida</h3>
+                        <p>Baxt — Sirdaryo viloyatining Sirdaryo tumanidagi obod va rivojlanayotgan shaharlaridan biri bo‘lib, qulay geografik joylashuvi va yoshlar ta’limiga qaratilgan e’tibori bilan ajralib turadi.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 10. PROFIL, PAROL O'ZGARTIRISH VA EKSPORT/IMPORT/JSON FAYL -->
+            <section class="page" id="page-profile">
+                <h2 class="page-title">Foydalanuvchi profili va sozlamalar</h2>
+                <div class="profile-grid">
+                    <div class="profile-card">
+                        <div class="profile-card__avatar">🎓</div>
+                        <h3 id="profileName">O‘quvchi</h3>
+                        <p><strong>Login:</strong> <span id="profileLogin">-</span></p>
+                        <p><strong>Manzil:</strong> Sirdaryo viloyati, Baxt shahri, Ittifoq MFY, 11-maktab</p>
+                        <p><strong>Sinf va guruh:</strong> 9-"B" sinf, 2-guruh</p>
+                        <p><strong>Kirish vaqti:</strong> <span id="profileLoginTime">-</span></p>
+                        <p><strong>Eng yuqori viktorina bali:</strong> <span id="profileBestScore">0</span> / 30</p>
+                    </div>
+
+                    <div class="profile-card">
+                        <h3>🔑 Parolni o‘zgartirish</h3>
+                        <form class="pass-change-form" onsubmit="changeUserPassword(event)">
+                            <div class="form-group">
+                                <label for="oldPassInput">Joriy parol</label>
+                                <input type="password" id="oldPassInput" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="newPassInput">Yangi parol (kamida 4 belgi)</label>
+                                <input type="password" id="newPassInput" minlength="4" required>
+                            </div>
+                            <p class="form-msg" id="passChangeMsg"></p>
+                            <button type="submit" class="btn btn--primary btn--sm">Parolni yangilash</button>
+                        </form>
+
+                        <hr class="divider">
+
+                        <h3>💾 Ma’lumotlarni eksport / import / JSON fayl</h3>
+                        <p class="small-note">Guruh a’zolari va izohlarni nusxalash, .json faylga yuklash yoki tiklash:</p>
+                        <div class="export-actions">
+                            <button type="button" class="btn btn--outline btn--sm" onclick="exportProjectData()">📤 Nusxalash</button>
+                            <button type="button" class="btn btn--primary btn--sm" onclick="downloadJsonFile()">⬇️ .JSON yuklash</button>
+                            <button type="button" class="btn btn--gold btn--sm" onclick="toggleImportBox()">📥 Import</button>
+                        </div>
+                        <div class="import-box hidden" id="importBox">
+                            <textarea id="importJsonArea" rows="3" placeholder="JSON matnini shu yerga joylashtiring..."></textarea>
+                            <button type="button" class="btn btn--primary btn--sm" onclick="importProjectData()">Saqlash</button>
+                        </div>
+                        <p class="form-msg ok" id="dataTransferMsg"></p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="footer">
+            <p>Sirdaryo viloyati • Baxt shahri • Ittifoq MFY • 11-maktab • 9-"B" sinf • 2-guruh (2026)</p>
+        </footer>
+    </div>
+
+    <!-- GALEREYA LIGHTBOX MODALI -->
+    <div class="lightbox hidden" id="lightbox" onclick="closeLightboxOutside(event)">
+        <div class="lightbox__box">
+            <button class="lightbox__close" onclick="closeLightbox()">&times;</button>
+            <h3 id="lightboxTitle"></h3>
+            <div class="lightbox__art" id="lightboxArt"></div>
+            <p id="lightboxDesc"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
